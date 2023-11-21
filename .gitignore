@@ -163,4 +163,12 @@ cython_debug/
 .vscode
 pyrightconfig.json
 
+# Training run directories
 runs
+
+# Model checkpoints
+models
+
+# Ignore data set directory apart from generation scripts
+data
+!data/generation_scripts
