@@ -1,13 +1,19 @@
-# Turbulent Flow Simulation using Autoregressive Conditional Diffusion Models (ACDM)
-This repository contains the source code for the paper [Turbulent Flow Simulation using Autoregressive Conditional Diffusion Models](https://arxiv.org/abs/2309.01745) by [Georg Kohl](https://ge.in.tum.de/about/georg-kohl/), [Liwei Chen](https://ge.in.tum.de/about/dr-liwei-chen/), and [Nils Thuerey](https://ge.in.tum.de/about/n-thuerey/).
+# Benchmarking Autoregressive Conditional Diffusion Models for Turbulent Flow Simulation
+This repository contains the source code for the paper [Benchmarking Autoregressive Conditional Diffusion Models for Turbulent Flow Simulation](https://arxiv.org/abs/2309.01745) by [Georg Kohl](https://ge.in.tum.de/about/georg-kohl/), [Liwei Chen](https://ge.in.tum.de/about/dr-liwei-chen/), and [Nils Thuerey](https://ge.in.tum.de/about/n-thuerey/). Our work benchmarks the prediction of turbulent flow fields from an initial condition across a range of architectures:
 
-Our work targets the prediction of turbulent flow fields from an initial condition using autoregressive conditional diffusion models (ACDMs). Our method relies on the DDPM approach, a class of generative models based on a parameterized Markov chain. They can be trained to learn the conditional distribution of a target variable given a conditioning. In our case, the target variable is the flow field at the next time step, and the conditioning is the flow field at the current time step, i.e., the simulation trajectory is created via autoregressive unrolling of the model. We showed that ACDMs can accurately and probabilistically predict turbulent flow fields, and that the resulting trajectories align with the statistics of the underlying physics. Furthermore, ACDMs can generalize to flow parameters beyond the training regime, and exhibit high temporal rollout stability, without compromising the quality of generated samples.
+1. **Autoregressive conditional diffusion models (ACDMs):** This method relies on the DDPM approach, a class of generative models based on a parameterized Markov chain. They can be trained to learn the conditional distribution of a target variable given a conditioning. In our case, the target variable is the flow field at the next time step, and the conditioning is the flow field at the current time step, i.e., the simulation trajectory is created via autoregressive unrolling of the model. We showed that ACDMs can accurately and probabilistically predict turbulent flow fields, and that the resulting trajectories align with the statistics of the underlying physics. Furthermore, ACDMs can generalize to flow parameters beyond the training regime, and exhibit high temporal rollout stability, without compromising the quality of generated samples.
+
+2. **U-Net Variants**: We consider a range of different training variants of the backbone U-Net used in ACDM. It can be trained as a classic next-step predictor, with unrolled training to improve the stability, or with additional training noise. Furthermore, we also implement [PDE-Refiner](https://arxiv.org/abs/2308.05732) based on this U-Net.
+
+3. **ResNets and Fourier Neural Operators**: Our source code alsintegrates [Dilated ResNets](https://arxiv.org/abs/2112.15275) and [Fourier Neural Operators](https://github.com/NeuralOperator/neuraloperator), as established flow prediction architectures.
+
+4. **Latent-Space Transformers**: Finally, we provide different implementation variants of latent-space transformers. These architectures contain an autoencoder to embed the flow states in a smaller latent space. A secondary transformer model computes updated latent spaces forward in time, that can be decoded to create flow trajectories. We train the combined architecture end-to-end.
 
 Further information about this work can be also found at our [project website](https://ge.in.tum.de/publications/2023-acdm-kohl/). Feel free to contact us if you have questions or suggestions regarding our work or the source code provided here.
 
 -----------------------------------------------------------------------------------------------------
 
-## Simple Demonstration
+## Simple ACDM Demonstration
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tum-pbs/autoreg-pde-diffusion/blob/master/acdm-demo.ipynb)
 
@@ -25,8 +31,8 @@ conda activate ACDM
 In the following, all commands should be run from the root directory of this source code. Running the training or sampling code in the `src` directory requires the generation of data sets as described in the following.
 
 
-## Basic Usage
-Once the data sets are generated, models can be trained using the scripts `src/training_*.py`, trained models can be sampled with `src/sample_models_*.py`, and model predictions can be evaluated and visualized with `src/plot_*.py`. Each script contains various configuration options at the beginning of the file. All files should be run according to the following pattern:
+## Model Training, Sampling, and Evaluation
+Once the data sets are generated, model architectures can be trained using the scripts `src/training_*.py`, trained models can be sampled with `src/sample_models_*.py`, and model predictions can be evaluated and visualized with `src/plot_*.py`. Each script contains various configuration options and architecture selections at the beginning of the file. All files should be run according to the following pattern:
 ```shell
 python src/training_*.py
 python src/sample_models_*.py
@@ -114,7 +120,7 @@ If you use the source code or data sets provided here, please consider citing ou
 ```
 @article{kohl2023_acdm,
   author = {Georg Kohl and Li{-}Wei Chen and Nils Thuerey},
-  title = {Turbulent Flow Simulation using Autoregressive Conditional Diffusion Models},
+  title = {Benchmarking Autoregressive Conditional Diffusion Models for Turbulent Flow Simulation},
   journal = {arXiv},
   year = {2023},
   eprint = {2309.01745},
