@@ -3,6 +3,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset, zoomed_inset_axes
 
 from lsim.distance_model import DistanceModel as LSIM_Model
 from turbpred.loss import loss_lsim
@@ -28,23 +29,28 @@ predictionFolder = "results/sampling/%s" % datasetName
 outputFolder = "results"
 
 models = {
-    #"ResNet": "resnet-s2.npz",
-    "Dil-ResNet": "dil-resnet-s2.npz",
+    #"ResNet": "resnet-m2.npz",
+    "Dil-ResNet": "dil-resnet-m2.npz",
 
-    "FNO16": "fno-16modes-s2.npz",
-    #"FNO32": "fno-32modes-s2.npz",
+    "FNO16": "fno-16modes-m2.npz",
+    #"FNO32": "fno-32modes-m2.npz",
 
     #"TF-MGN": "tf-mgn.npz",
     "TF-Enc": "tf-enc.npz",
     #"TF-VAE": "tf-vae.npz",
 
-    "U-Net": "unet-s2.npz",
+    "U-Net": "unet-m2.npz",
+    "U-Net-ut": "unet-m8.npz",
+    "U-Net-tn": "unet-m2-noise0.01.npz",
+
+    "Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
     "ACDM-ncn": "direct-ddpm+Prev20_ncn.npz",
     "ACDM": "direct-ddpm+Prev20.npz",
 }
 
 metric = "PCC"
+withInset = False
 
 
 groundTruthDict = torch.load(os.path.join(predictionFolder, "groundTruth.dict"))
@@ -120,7 +126,7 @@ for modelName, modelPath in models.items():
         distanceStd += [torch.std(lsimOverTime, dim=(0,1,2)).numpy()]
 
 
-fig, ax = plt.subplots(1, figsize=(4.5,1.8), dpi=150)
+fig, ax = plt.subplots(1, figsize=(5.0,2.3), dpi=150)
 #ax.set_title(title)
 ax.text(0.008, 0.018, getDatasetName(datasetName), color="k", bbox=dict(facecolor="whitesmoke", edgecolor="darkslategray", boxstyle="round"),
         horizontalalignment="left", verticalalignment="bottom", transform=ax.transAxes)
@@ -129,13 +135,26 @@ ax.set_xlabel("Time step")
 ax.set_ylabel("Correlation to Sim.")
 ax.yaxis.grid(True)
 ax.set_axisbelow(True)
-ax.set_ylim([0.85,1.005])
+
+if withInset:
+    axIns = ax.inset_axes([0.05, 0.2, 0.45, 0.50], xlim=(0.0, 100), ylim=(0.99, 1.00))
+    mark_inset(ax, axIns, loc1=1, loc2=3, fc="none", ec="0.5")
+    axIns.tick_params(axis="y", labelsize=8)
+    axIns.set_facecolor("0.95")
+    axIns.set_xticks([])
+
+
+ax.set_ylim([0.94,1.002])
 for i in range(len(modelNames)):
     linestyle = "dashed" if modelNames[i] == "Simulation" else "solid"
     color = getColor(modelNames[i])
     label = getModelName(modelNames[i])
     ax.plot(np.arange(distanceMean[i].shape[0]) + 2, distanceMean[i], linewidth=1.5, color=color, label=label, linestyle=linestyle)
     ax.fill_between(np.arange(distanceMean[i].shape[0]) + 2, distanceMean[i] - distanceStd[i], distanceMean[i] + distanceStd[i], facecolor=color, alpha=0.15)
+    if withInset:
+        axIns.plot(np.arange(distanceMean[i].shape[0]) + 2, distanceMean[i], linewidth=1.5, color=color, label=label, linestyle=linestyle)
+        axIns.fill_between(np.arange(distanceMean[i].shape[0]) + 2, distanceMean[i] - distanceStd[i], distanceMean[i] + distanceStd[i], facecolor=color, alpha=0.15)
+
 #ax.legend(ncol=3, columnspacing=0.8, loc="lower left", fontsize=9.5)#bbox_to_anchor=(1.01, 1.06))
 
 fig.tight_layout(pad=0.4)

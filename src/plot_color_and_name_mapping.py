@@ -10,17 +10,22 @@ colorRemap = {
 "Sim.": "k",
 "Simulation-full": "k",
 
-"TF-MGN": "tab:pink",
-"TF-Enc": "tab:red",
-"TF-VAE": "tab:purple",
+"TF-MGN": mpl.colormaps["tab20"].resampled(20)(range(20))[9],
+"TF-Enc": "tab:purple",
+"TF-VAE": "tab:pink",
 
-"ResNet": "tab:gray",
-"Dil-ResNet": "tab:cyan",
+"ResNet": mpl.colormaps["tab20"].resampled(20)(range(20))[15],
+"Dil-ResNet": "tab:gray",
 
-"FNO16": "tab:green",
+"FNO16": mpl.colormaps["tab20"].resampled(20)(range(20))[17],
 "FNO32": "tab:olive",
 
+"DFP": "chartreuse",
+"DFP-ACDM": "tan",
+
 "U-Net": "tab:blue",
+"U-Net-ut": "tab:green",
+"U-Net-tn": "tab:cyan",
 "U-Net-m4":      mpl.colormaps["turbo"].resampled(10)(range(10))[3],
 "U-Net-m8":      mpl.colormaps["turbo"].resampled(10)(range(10))[5],
 "U-Net-m16":     mpl.colormaps["turbo"].resampled(10)(range(10))[7],
@@ -30,7 +35,7 @@ colorRemap = {
 
 "U-Net-n0.0001": mpl.colormaps["viridis"].resampled(25)(range(25))[13],
 "U-Net-n0.001":  mpl.colormaps["viridis"].resampled(25)(range(25))[16],
-"U-Net-n0.01":   mpl.colormaps["viridis"].resampled(25)(range(25))[20],
+"U-Net-n0.01":   mpl.colormaps["viridis"].resampled(25)(range(25))[19],
 "U-Net-n0.1":    mpl.colormaps["viridis"].resampled(25)(range(25))[22],
 "U-Net-n1.0":    mpl.colormaps["viridis"].resampled(25)(range(25))[24],
 
@@ -49,6 +54,30 @@ colorRemap = {
 "ACDM-ncn-n0.01":   mpl.colormaps["terrain_r"].resampled(20)(range(20))[13],
 "ACDM-ncn-n0.1":    mpl.colormaps["terrain_r"].resampled(20)(range(20))[16],
 "ACDM-ncn-n1.0":    mpl.colormaps["terrain_r"].resampled(20)(range(20))[19],
+
+"U-Net-LSIM0.00001": mpl.colormaps["nipy_spectral"].resampled(20)(range(20))[7],
+"U-Net-LSIM0.0001":  mpl.colormaps["nipy_spectral"].resampled(20)(range(20))[9],
+"U-Net-LSIM0.001":   mpl.colormaps["nipy_spectral"].resampled(20)(range(20))[11],
+"U-Net-LSIM0.01":    mpl.colormaps["nipy_spectral"].resampled(20)(range(20))[13],
+"U-Net-LSIM0.1":     mpl.colormaps["nipy_spectral"].resampled(20)(range(20))[15],
+"U-Net-LSIM1.0":     mpl.colormaps["nipy_spectral"].resampled(20)(range(20))[17],
+
+"Refiner": "tab:red",
+"Refiner2-std0.001":     mpl.colormaps["OrRd"].resampled(20)(range(20))[7],
+"Refiner2-std0.0001":    mpl.colormaps["OrRd"].resampled(20)(range(20))[10],
+"Refiner2-std0.00001":   mpl.colormaps["OrRd"].resampled(20)(range(20))[13],
+"Refiner2-std0.000001":  mpl.colormaps["OrRd"].resampled(20)(range(20))[16],
+"Refiner2-std0.0000001": mpl.colormaps["OrRd"].resampled(20)(range(20))[19],
+"Refiner4-std0.001":     mpl.colormaps["PuRd"].resampled(20)(range(20))[7],
+"Refiner4-std0.0001":    mpl.colormaps["PuRd"].resampled(20)(range(20))[10],
+"Refiner4-std0.00001":   mpl.colormaps["PuRd"].resampled(20)(range(20))[13],
+"Refiner4-std0.000001":  mpl.colormaps["PuRd"].resampled(20)(range(20))[16],
+"Refiner4-std0.0000001": mpl.colormaps["PuRd"].resampled(20)(range(20))[19],
+"Refiner8-std0.001":     mpl.colormaps["YlGn"].resampled(20)(range(20))[7],
+"Refiner8-std0.0001":    mpl.colormaps["YlGn"].resampled(20)(range(20))[10],
+"Refiner8-std0.00001":   mpl.colormaps["YlGn"].resampled(20)(range(20))[13],
+"Refiner8-std0.000001":  mpl.colormaps["YlGn"].resampled(20)(range(20))[16],
+"Refiner8-std0.0000001": mpl.colormaps["YlGn"].resampled(20)(range(20))[19],
 }
 
 modelRemap = {
@@ -65,6 +94,9 @@ modelRemap = {
 "FNO16": r"$\mathit{FNO}_{16}$",
 "FNO32": r"$\mathit{FNO}_{32}$",
 
+"DFP": r"$\mathit{DFP}$",
+"DFP-ACDM": r"$\mathit{DFP}_{\mathit{ACDM}}$",
+
 "U-Net": r"$\mathit{U}$-$\mathit{Net}$",
 "U-Net-m4": r"$\mathit{U}$-$\mathit{Net}_{\mathit{m4}}$",
 "U-Net-m8": r"$\mathit{U}$-$\mathit{Net}_{\mathit{m8}}$",
@@ -74,7 +106,6 @@ modelRemap = {
 "U-Net-m16-Pre": r"$\mathit{U}$-$\mathit{Net}_{\mathit{m16,Pre}}$",
 
 "ACDM": r"$\mathit{ACDM}$",
-"ACDM-bold": r"$\mathbf{ACDM}$",
 "ACDM-ncn": r"$\mathit{ACDM}_{\mathit{ncn}}$",
 "ACDM-R10": r"$\mathit{ACDM}_{\mathit{R10}}$",
 "ACDM-R15": r"$\mathit{ACDM}_{\mathit{R15}}$",
@@ -95,6 +126,30 @@ modelRemap = {
 "ACDM-ncn-n0.01": r"$\mathit{ACDM}_{\mathit{ncn,n1e-2}}$",
 "ACDM-ncn-n0.1": r"$\mathit{ACDM}_{\mathit{ncn,n1e-1}}$",
 "ACDM-ncn-n1.0": r"$\mathit{ACDM}_{\mathit{ncn,n1e0}}$",
+
+"U-Net-LSIM1.0": r"$\mathit{U}$-$\mathit{Net}_{\lambda1e0}$",
+"U-Net-LSIM0.1": r"$\mathit{U}$-$\mathit{Net}_{\lambda1e-1}$",
+"U-Net-LSIM0.01": r"$\mathit{U}$-$\mathit{Net}_{\lambda1e-2}$",
+"U-Net-LSIM0.001": r"$\mathit{U}$-$\mathit{Net}_{\lambda1e-3}$",
+"U-Net-LSIM0.0001": r"$\mathit{U}$-$\mathit{Net}_{\lambda1e-4}$",
+"U-Net-LSIM0.00001": r"$\mathit{U}$-$\mathit{Net}_{\lambda1e-5}$",
+
+"Refiner": r"$\mathit{Refiner}$",
+"Refiner2-std0.001": r"$\mathit{Refiner}_{\mathit{R2,\sigma1e-3}}$",
+"Refiner2-std0.0001": r"$\mathit{Refiner}_{\mathit{R2,\sigma1e-4}}$",
+"Refiner2-std0.00001": r"$\mathit{Refiner}_{\mathit{R2,\sigma1e-5}}$",
+"Refiner2-std0.000001": r"$\mathit{Refiner}_{\mathit{R2,\sigma1e-6}}$",
+"Refiner2-std0.0000001": r"$\mathit{Refiner}_{\mathit{R2,\sigma1e-7}}$",
+"Refiner4-std0.001": r"$\mathit{Refiner}_{\mathit{R4,\sigma1e-3}}$",
+"Refiner4-std0.0001": r"$\mathit{Refiner}_{\mathit{R4,\sigma1e-4}}$",
+"Refiner4-std0.00001": r"$\mathit{Refiner}_{\mathit{R4,\sigma1e-5}}$",
+"Refiner4-std0.000001": r"$\mathit{Refiner}_{\mathit{R4,\sigma1e-6}}$",
+"Refiner4-std0.0000001": r"$\mathit{Refiner}_{\mathit{R4,\sigma1e-7}}$",
+"Refiner8-std0.001": r"$\mathit{Refiner}_{\mathit{R8,\sigma1e-3}}$",
+"Refiner8-std0.0001": r"$\mathit{Refiner}_{\mathit{R8,\sigma1e-4}}$",
+"Refiner8-std0.00001": r"$\mathit{Refiner}_{\mathit{R8,\sigma1e-5}}$",
+"Refiner8-std0.000001": r"$\mathit{Refiner}_{\mathit{R8,\sigma1e-6}}$",
+"Refiner8-std0.0000001": r"$\mathit{Refiner}_{\mathit{R8,\sigma1e-7}}$",
 }
 
 datasetRemap = {

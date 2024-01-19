@@ -13,7 +13,7 @@ plt.rcParams['ps.fonttype'] = 42
 
 
 datasetName = "longer"
-modelMinMax = (0,1)
+modelMinMax = (2,3)
 evalMinMax = (0,5)
 sequence = [0]
 timeSteps = [79,129]
@@ -26,7 +26,9 @@ outputFolder = "results"
 models = {
     "Simulation": "groundTruth.dict",
     #"TF-VAE": "tf-vae.npz",
-    "ACDM": "direct-ddpm+Prev20.npz"
+    #"Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
+    "ACDM": "direct-ddpm+Prev20.npz",
+
 }
 
 
@@ -73,13 +75,13 @@ for modelName, modelPath in models.items():
 
 
 
-fig, axs = plt.subplots(nrows=len(timeSteps), ncols=5, figsize=(5.8,2.2), dpi=250)
+fig, axs = plt.subplots(nrows=len(timeSteps), ncols=5, figsize=(5.8,2.4), dpi=250)
 for i in range(len(timeSteps)):
     for j in range(5):
         axs[i,j].set_xticks([])
         axs[i,j].set_yticks([])
 
-axs[len(timeSteps)-1,0].set_xlabel("Simulation")
+axs[len(timeSteps)-1,0].set_xlabel(r"Sim. ($%d\times%d$)" % (spatialZoom[0][1]-spatialZoom[0][0], spatialZoom[1][1]-spatialZoom[1][0]))
 for i in range(1,4):
     axs[len(timeSteps)-1,i].set_xlabel("Sample %d" % i)
 axs[len(timeSteps)-1,4].set_xlabel("Std. Dev.")
@@ -93,12 +95,13 @@ for t in range(len(timeSteps)):
     im = axs[t,4].imshow(np.std(frameData[1][:,t], axis=0), interpolation="catrom", cmap="YlGnBu", vmin=0, vmax=0.16)
 
 
-fig.tight_layout(pad=0.4, w_pad=0.1, h_pad=0.2)
-fig.subplots_adjust(right=0.88)
+fig.tight_layout(pad=0.4, w_pad=0.2, h_pad=0.2)
+fig.subplots_adjust(right=0.88, top=0.92)
+fig.suptitle(getModelName(modelNames[1]))
 cbarAx = fig.add_axes([0.90, 0.04, 0.025, 0.92])
 cbarAx.tick_params(labelsize=8)
 fig.colorbar(im, cax=cbarAx)
-fig.savefig("%s/data_posterior_vae_%s_%s.pdf" % (outputFolder, datasetName, field))
+fig.savefig("%s/data_posterior_%s_%s.pdf" % (outputFolder, datasetName, field))
 
 
 

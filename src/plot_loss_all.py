@@ -56,17 +56,21 @@ if not load:
         predictionFolder = "results/sampling/%s" % datasetName
 
         models = {
-            "ResNet": "resnet-s2.npz",
-            "Dil-ResNet": "dil-resnet-s2.npz",
+            "ResNet": "resnet-m2.npz",
+            "Dil-ResNet": "dil-resnet-m2.npz",
 
-            "FNO16": "fno-16modes-s2.npz",
-            "FNO32": "fno-32modes-s2.npz",
+            "FNO16": "fno-16modes-m2.npz",
+            "FNO32": "fno-32modes-m2.npz",
 
             "TF-MGN": "tf-mgn.npz",
             "TF-Enc": "tf-enc.npz",
             "TF-VAE": "tf-vae.npz",
 
-            "U-Net": "unet-s2.npz",
+            "U-Net": "unet-m2.npz",
+            "U-Net-ut": "unet-m8.npz",
+            "U-Net-tn": "unet-m2-noise0.01.npz",
+
+            "Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
             "ACDM-ncn": "direct-ddpm+Prev%d_ncn.npz" % (100 if datasetName in ["zInterp"] else 20),
             "ACDM": "direct-ddpm+Prev%d.npz" % (100 if datasetName in ["zInterp"] else 20),
@@ -139,7 +143,7 @@ else:
     distanceStd= torch.load("results/temp/%s_DistanceStd.loss" % metric)
 
 
-fig, axs = plt.subplots(ncols=len(datasets), figsize=(14,1.2), dpi=150)
+fig, axs = plt.subplots(ncols=len(datasets), figsize=(16,1.2), dpi=150)
 
 for i in range(len(datasets)):
     datasetName = datasets[i]
@@ -154,8 +158,8 @@ for i in range(len(datasets)):
     axs[i].set_ylim(yLimitMap[datasetName])
     colors = [getColor(k) for k in modelNames[datasetName]]
 
-    posX = [0.0,1.0, 2.5,3.5, 5.0,6.0,7.0, 8.5, 10,11]
-    axs[i].set_xlim([-0.7,11.7])
+    posX = [0.0,1.0, 2.5,3.5, 5.0,6.0,7.0, 8.5,9.5,10.5, 12.0, 13.5,14.5]
+    axs[i].set_xlim([-0.8,15.3])
     legHandle = axs[i].bar(posX, distanceMean[datasetName], 1.0, yerr=distanceStd[datasetName], capsize=2, color=colors)
 
 for i in range(len(modelNames[datasetName])):
@@ -165,7 +169,7 @@ for i in range(len(modelNames[datasetName])):
 
 if legend:
     labels = [getModelName(k) for k in modelNames[datasetName]]
-    fig.legend(legHandle, labels, ncol=len(labels), loc="upper center", bbox_to_anchor=(0.5, 0.07))
+    fig.legend(legHandle, labels, ncol=len(labels), columnspacing=1.0, loc="upper center", bbox_to_anchor=(0.5, 0.07))
 
 #fig.tight_layout(pad=0.4)
 fig.subplots_adjust(wspace=0.3)

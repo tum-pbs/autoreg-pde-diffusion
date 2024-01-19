@@ -51,8 +51,8 @@ models = {
 
     "tf-mgn":
         (
-            ["runs/2D_Iso/128_tf_mgn_MSE_00/Model.pth",
-            "runs/2D_Iso/128_tf_mgn_MSE_01/Model.pth",
+            ["runs/2D_Iso/128_tf-mgn_MSE_00/Model.pth",
+            "runs/2D_Iso/128_tf-mgn_MSE_01/Model.pth",
             ],
             {"zInterp": 8},
             {"numEvals": 1,
@@ -69,6 +69,38 @@ models = {
             {"numEvals": 1,
             },
         ),
+
+    "unet-m8":
+        (
+            ["runs/2D_Iso/128_unet-m8_MSE_00/Model.pth",
+            "runs/2D_Iso/128_unet-m8_MSE_01/Model.pth",
+            ],
+            {"zInterp": 8},
+            {"numEvals": 1,
+            },
+        ),
+
+    "unet-m2-noise0.01":
+        (
+            ["runs/2D_Iso/128_unet-m2-noise0.01_MSE_00/Model.pth",
+            "runs/2D_Iso/128_unet-m2-noise0.01_MSE_01/Model.pth",
+            ],
+            {"zInterp": 8},
+            {"numEvals": 1,
+            },
+        ),
+
+
+    "refiner4_std0.00001":
+       (
+            ["runs/2D_Iso/128_refiner4_std0.00001_00/Model.pth",
+            "runs/2D_Iso/128_refiner4_std0.00001_01/Model.pth",
+            ],
+            {"zInterp": 8},
+            {"numEvals": numEvals,
+            "sequentialEvalRuns": {"zInterp": True},
+           },
+       ),
 
 
     "resnet-m2":

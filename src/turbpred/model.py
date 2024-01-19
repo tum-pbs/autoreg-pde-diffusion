@@ -9,9 +9,11 @@ from turbpred.model_encoder import EncoderModelSkip, DecoderModelSkip
 from turbpred.model_latent_transformer import LatentModelTransformerEnc, LatentModelTransformerDec, LatentModelTransformer, LatentModelTransformerMGN, LatentModelTransformerMGNParamEmb
 from turbpred.model_diffusion import DiffusionModel
 from turbpred.model_diffusion_blocks import Unet
-from turbpred.model_resnet import DilatedResNet
 from turbpred.params import DataParams, TrainingParams, LossParams, ModelParamsEncoder, ModelParamsDecoder, ModelParamsLatent
 
+from turbpred.model_dfpnet import DfpNet
+from turbpred.model_resnet import DilatedResNet
+from turbpred.model_refiner import PDERefiner
 
 class PredictionModel(nn.Module):
     p_d: DataParams
@@ -65,7 +67,8 @@ class PredictionModel(nn.Module):
             elif self.p_md.arch in ["unet", "unet+Prev", "unet+2Prev", "unet+3Prev",
                                     "dil_resnet", "dil_resnet+Prev", "dil_resnet+2Prev", "dil_resnet+3Prev",
                                     "resnet", "resnet+Prev", "resnet+2Prev", "resnet+3Prev",
-                                    "fno", "fno+Prev", "fno+2Prev", "fno+3Prev"]:
+                                    "fno", "fno+Prev", "fno+2Prev", "fno+3Prev",
+                                    "dfp", "dfp+Prev", "dfp+2Prev", "dfp+3Prev",]:
                 if "+Prev" in self.p_md.arch:
                     prevSteps = 2
                 elif "+2Prev" in self.p_md.arch:
@@ -88,6 +91,9 @@ class PredictionModel(nn.Module):
                 elif "fno" in self.p_md.arch:
                     self.modelDecoder = FNO(n_modes=(self.p_md.fnoModes[0],self.p_md.fnoModes[1]), hidden_channels=self.p_md.decWidth, in_channels=inChannels, out_channels=outChannels, n_layers=4)
 
+                elif "dfp" in self.p_md.arch:
+                    self.modelDecoder = DfpNet(inChannels=inChannels, outChannels=outChannels, blockChannels=self.p_md.decWidth)
+
                 else:
                     raise ValueError("Unknown decoder architecture")
 
@@ -95,20 +101,25 @@ class PredictionModel(nn.Module):
             elif self.p_md.arch in ["decode-ddpm", "decode-ddim", "direct-ddpm+First", "direct-ddim+First",
                                     "direct-ddpm", "direct-ddim", "direct-ddpm+Prev", "direct-ddim+Prev",
                                     "direct-ddpm+2Prev", "direct-ddim+2Prev", "direct-ddpm+3Prev", "direct-ddim+3Prev", 
+                                    "dfp-ddpm", "dfp-ddpm+Prev", "dfp-ddpm+2Prev", "dfp-ddpm+3Prev",
                                     "direct-ddpm+Enc", "direct-ddim+Enc", "hybrid-ddpm+Lat", "hybrid-ddim+Lat"]:
                 if self.p_md.arch in ["decode-ddpm", "decode-ddim"]:
                     condChannels = self.p_me.latentSize + len(self.p_d.simParams)
-                elif self.p_md.arch in ["direct-ddpm", "direct-ddim"]:
+                elif self.p_md.arch in ["direct-ddpm", "direct-ddim", "dfp-ddpm"]:
                     condChannels = self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams)
-                elif self.p_md.arch in ["direct-ddpm+First", "direct-ddim+First", "direct-ddpm+Prev", "direct-ddim+Prev"]:
+                elif self.p_md.arch in ["direct-ddpm+First", "direct-ddim+First", "direct-ddpm+Prev", "direct-ddim+Prev", "dfp-ddpm+Prev"]:
                     condChannels = 2 * (self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams))
-                elif self.p_md.arch in ["direct-ddpm+2Prev", "direct-ddim+2Prev"]:
+                elif self.p_md.arch in ["direct-ddpm+2Prev", "direct-ddim+2Prev", "dfp-ddpm+2Prev"]:
                     condChannels = 3 * (self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams))
-                elif self.p_md.arch in ["direct-ddpm+3Prev", "direct-ddim+3Prev"]:
+                elif self.p_md.arch in ["direct-ddpm+3Prev", "direct-ddim+3Prev", "dfp-ddpm+3Prev"]:
                     condChannels = 4 * (self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams))
                 elif self.p_md.arch in ["direct-ddpm+Enc", "direct-ddim+Enc", "hybrid-ddpm+Lat", "hybrid-ddim+Lat"]:
                     condChannels = (self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams)) + (self.p_me.latentSize + len(self.p_d.simParams))
                 self.modelDecoder = DiffusionModel(p_d, p_md, p_d.dimension, condChannels=condChannels)
+
+            elif self.p_md.arch == "refiner":
+                condChannels = self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams)
+                self.modelDecoder = PDERefiner(p_d, p_md, condChannels=condChannels)
 
 
             elif self.p_md.arch in ["skip+finetune-ddpm", "skip+finetune-ddim"]:
@@ -183,9 +194,12 @@ class PredictionModel(nn.Module):
                 "dil_resnet", "dil_resnet+Prev", "dil_resnet+2Prev", "dil_resnet+3Prev",
                 "resnet", "resnet+Prev", "resnet+2Prev", "resnet+3Prev",
                 "fno", "fno+Prev", "fno+2Prev", "fno+3Prev",
+                "dfp", "dfp+Prev", "dfp+2Prev", "dfp+3Prev",
+                "refiner",
                 "direct-ddpm", "direct-ddim", "direct-ddpm+First", "direct-ddim+First", 
                 "direct-ddpm+Prev", "direct-ddim+Prev", "direct-ddpm+2Prev", "direct-ddim+2Prev",
-                "direct-ddpm+3Prev", "direct-ddim+3Prev", "direct-ddpm+Enc", "direct-ddim+Enc"]):
+                "direct-ddpm+3Prev", "direct-ddim+3Prev", "direct-ddpm+Enc", "direct-ddim+Enc",
+                "dfp-ddpm", "dfp-ddpm+Prev", "dfp-ddpm+2Prev", "dfp-ddpm+3Prev",]):
 
             latentSpace = torch.zeros(d.shape[0], d.shape[1], self.p_me.latentSize)
             latentSpace = latentSpace.to(device)
@@ -194,13 +208,13 @@ class PredictionModel(nn.Module):
                 latentSpace = self.modelEncoder(d)
             else:
                 if isinstance(self.modelLatent, LatentModelTransformerEnc):
-                    latentSpace = self.forwardLatentTransEnc(d, latentSpace, simParam)
+                    latentSpace = self.forwardTransEnc(d, latentSpace, simParam)
 
                 elif isinstance(self.modelLatent, LatentModelTransformerDec) or isinstance(self.modelLatent, LatentModelTransformer):
-                    latentSpace = self.forwardLatentTransDec(d, latentSpace, simParam)
+                    latentSpace = self.forwardTransDec(d, latentSpace, simParam)
 
                 elif isinstance(self.modelLatent, LatentModelTransformerMGN):
-                    latentSpace = self.forwardLatentTransMGN(d, latentSpace, simParam)
+                    latentSpace = self.forwardTransMGN(d, latentSpace, simParam)
 
                 else:
                     raise ValueError("Invalid latent model!")

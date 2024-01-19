@@ -59,9 +59,9 @@ models = {
 
     "tf-mgn":
         (
-            ["runs/2D_Inc/128_tf_mgn_MSE_00/Model.pth",
-            "runs/2D_Inc/128_tf_mgn_MSE_01/Model.pth",
-            "runs/2D_Inc/128_tf_mgn_MSE_02/Model.pth",
+            ["runs/2D_Inc/128_tf-mgn_MSE_00/Model.pth",
+            "runs/2D_Inc/128_tf-mgn_MSE_01/Model.pth",
+            "runs/2D_Inc/128_tf-mgn_MSE_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -79,6 +79,41 @@ models = {
             {"numEvals": 1,
             },
         ),
+
+    "unet-m8":
+        (
+            ["runs/2D_Inc/128_unet-m8_MSE_00/Model.pth",
+            "runs/2D_Inc/128_unet-m8_MSE_01/Model.pth",
+            "runs/2D_Inc/128_unet-m8_MSE_02/Model.pth",
+            ],
+            {"lowRey": 8, "highRey": 8, "varReyIn": 1},
+            {"numEvals": 1,
+            },
+        ),
+
+    "unet-m2-noise0.01":
+        (
+            ["runs/2D_Inc/128_unet-m2-noise0.01_MSE_00/Model.pth",
+            "runs/2D_Inc/128_unet-m2-noise0.01_MSE_01/Model.pth",
+            "runs/2D_Inc/128_unet-m2-noise0.01_MSE_02/Model.pth",
+            ],
+            {"lowRey": 8, "highRey": 8, "varReyIn": 1},
+            {"numEvals": 1,
+            },
+        ),
+
+
+    "refiner4_std0.000001":
+       (
+            ["runs/2D_Inc/128_refiner4_std0.000001_00/Model.pth",
+            "runs/2D_Inc/128_refiner4_std0.000001_01/Model.pth",
+            "runs/2D_Inc/128_refiner4_std0.000001_02/Model.pth",
+            ],
+            {"lowRey": 8, "highRey": 8, "varReyIn": 4},
+            {"numEvals": numEvals,
+            "sequentialEvalRuns": {"lowRey": True, "highRey": True, "varReyIn": True},
+           },
+       ),
 
 
     "resnet-m2":

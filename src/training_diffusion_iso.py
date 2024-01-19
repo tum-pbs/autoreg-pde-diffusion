@@ -45,6 +45,17 @@ if __name__ == "__main__":
     # pretrainPath = ""
 
 
+    ### Refiner4_std0.00001
+    # modelName = "2D_Iso/128_refiner4_std0.00001"
+    # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,1], randSeqOffset=True,
+    #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
+    # p_t = TrainingParams(epochs=100, lr=0.0001)
+    # p_l = LossParams()
+    # p_me = None
+    # p_md = ModelParamsDecoder(arch="refiner", diffSteps=4, refinerStd=0.00001)
+    # p_ml = None
+    # pretrainPath = ""
+
 
     trainSet = TurbulenceDataset("Training", ["data"], filterTop=["128_iso"], filterSim=[(200,351)], excludefilterSim=True, filterFrame=[(0,1000)],
                     sequenceLength=[p_d.sequenceLength], randSeqOffset=p_d.randSeqOffset, simFields=p_d.simFields, simParams=p_d.simParams, printLevel="sim")

@@ -123,7 +123,8 @@ class Trainer(object):
             if self.model.p_md.arch in ["unet", "unet+Prev", "unet+2Prev", "unet+3Prev",
                                     "dil_resnet", "dil_resnet+Prev", "dil_resnet+2Prev", "dil_resnet+3Prev",
                                     "resnet", "resnet+Prev", "resnet+2Prev", "resnet+3Prev",
-                                    "fno", "fno+Prev", "fno+2Prev", "fno+3Prev",]:
+                                    "fno", "fno+Prev", "fno+2Prev", "fno+3Prev",
+                                    "dfp", "dfp+Prev", "dfp+2Prev", "dfp+3Prev",]:
                 numFields = self.p_d.dimension + len(self.p_d.simFields)
                 p = p[:,:,0:numFields]
                 d = d[:,:,0:numFields]

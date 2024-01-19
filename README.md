@@ -5,7 +5,7 @@ This repository contains the source code for the paper [Benchmarking Autoregress
 
 2. **U-Net Variants**: We consider a range of different training variants of the backbone U-Net used in ACDM. It can be trained as a classic next-step predictor, with unrolled training to improve the stability, or with additional training noise. Furthermore, we also implement [PDE-Refiner](https://arxiv.org/abs/2308.05732) based on this U-Net.
 
-3. **ResNets and Fourier Neural Operators**: Our source code alsintegrates [Dilated ResNets](https://arxiv.org/abs/2112.15275) and [Fourier Neural Operators](https://github.com/NeuralOperator/neuraloperator), as established flow prediction architectures.
+3. **ResNets and Fourier Neural Operators**: Our source code also integrates [Dilated ResNets](https://arxiv.org/abs/2112.15275) and [Fourier Neural Operators](https://github.com/NeuralOperator/neuraloperator), as established flow prediction architectures.
 
 4. **Latent-Space Transformers**: Finally, we provide different implementation variants of latent-space transformers. These architectures contain an autoencoder to embed the flow states in a smaller latent space. A secondary transformer model computes updated latent spaces forward in time, that can be decoded to create flow trajectories. We train the combined architecture end-to-end.
 

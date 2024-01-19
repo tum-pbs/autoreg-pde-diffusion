@@ -32,6 +32,28 @@ if __name__ == "__main__":
     p_ml = None
     pretrainPath = ""
 
+    ### UNET_ut
+    # modelName = "2D_Tra/128_unet-m8_MSE"
+    # p_d = DataParams(batch=16, augmentations=["normalize"], sequenceLength=[8,2], randSeqOffset=True,
+    #             dataSize=[128,64], dimension=2, simFields=["dens","pres"], simParams=["mach"], normalizeMode="machMixed")
+    # p_t = TrainingParams(epochs=1000, lr=0.0001)
+    # p_l = LossParams(recMSE=0.0, recLSIM=0.0, predMSE=1.0, predLSIM=0.0)
+    # p_me = None
+    # p_md = ModelParamsDecoder(arch="unet", pretrained=False)
+    # p_ml = None
+    # pretrainPath = ""
+
+    ### UNET_tn
+    # modelName = "2D_Tra/128_unet-m2-noise0.01_MSE"
+    # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,2], randSeqOffset=True,
+    #             dataSize=[128,64], dimension=2, simFields=["dens","pres"], simParams=["mach"], normalizeMode="machMixed")
+    # p_t = TrainingParams(epochs=1000, lr=0.0001)
+    # p_l = LossParams(recMSE=0.0, recLSIM=0.0, predMSE=1.0, predLSIM=0.0)
+    # p_me = None
+    # p_md = ModelParamsDecoder(arch="unet", pretrained=False, trainingNoise=0.01)
+    # p_ml = None
+    # pretrainPath = ""
+
 
     ### RESNET
     # modelName = "2D_Tra/128_resnet-m2_MSE"

@@ -4,6 +4,7 @@ import torch.nn.functional as F
 
 from turbpred.model_diffusion_blocks import Unet, linear_beta_schedule, quadratic_beta_schedule, sigmoid_beta_schedule, cosine_beta_schedule
 from turbpred.params import DataParams, ModelParamsDecoder
+from turbpred.model_dfpnet import DfpNetTimeEmbedding
 
 
 ### DIFFUSION MODEL WITH CONDITIONING
@@ -56,13 +57,20 @@ class DiffusionModel(nn.Module):
         self.register_buffer("sqrtOneMinusAlphasCumprod", sqrtOneMinusAlphasCumprod)
         self.register_buffer("sqrtPosteriorVariance", sqrtPosteriorVariance)
 
-        self.unet = Unet(
+        if "dfp" in self.p_md.arch:
+            self.unet = DfpNetTimeEmbedding(
+                inChannels= condChannels + (self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams)),
+                outChannels= condChannels + (self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams)),
+                blockChannels=self.p_md.decWidth,
+            )
+        else:
+            self.unet = Unet(
                 dim=self.p_d.dataSize[0],
                 channels= condChannels + (self.p_d.dimension + len(self.p_d.simFields) + len(self.p_d.simParams)),
                 dim_mults=(1,1,1),
                 use_convnext=True,
                 convnext_mult=1,
-        )
+            )
 
 
     # input shape (both inputs): B S C W H (D) -> output shape (both outputs): B S nC W H (D)

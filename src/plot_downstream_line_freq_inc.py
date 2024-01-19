@@ -13,10 +13,10 @@ plt.rcParams['ps.fonttype'] = 42
 
 
 
-datasetName = "lowRey"
+datasetName = "highRey"
 modelMinMax = (0,3)
 evalMinMax = (0,5)
-sequenceMinMax = (4,5)
+sequenceMinMax = (0,1)
 timeMinMax = (0,240)
 
 predictionFolder = "results/sampling/%s" % datasetName
@@ -25,19 +25,23 @@ outputFolder = "results"
 models = {
     "Simulation": "groundTruth.dict",
 
-    #"ResNet": "resnet-s2.npz",
-    "Dil-ResNet": "dil-resnet-s2.npz",
+    #"ResNet": "resnet-m2.npz",
+    #"Dil-ResNet": "dil-resnet-m2.npz",
 
-    "FNO16": "fno-16modes-s2.npz",
-    #"FNO32": "fno-32modes-s2.npz",
+    #"FNO16": "fno-16modes-m2.npz",
+    #"FNO32": "fno-32modes-m2.npz",
 
     #"TF-MGN": "tf-mgn.npz",
-    "TF-Enc": "tf-enc.npz",
+    #"TF-Enc": "tf-enc.npz",
     #"TF-VAE": "tf-vae.npz",
 
-    "U-Net": "unet-s2.npz",
+    #"U-Net": "unet-m2.npz",
+    "U-Net-ut": "unet-m8.npz",
+    "U-Net-tn": "unet-m2-noise0.01.npz",
 
-    "ACDM-ncn": "direct-ddpm+Prev20_ncn.npz",
+    #"Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
+
+    #"ACDM-ncn": "direct-ddpm+Prev20_ncn.npz",
     "ACDM": "direct-ddpm+Prev20.npz",
 }
 
@@ -127,9 +131,9 @@ ax.yaxis.grid(True)
 ax.set_axisbelow(True)
 
 if withInset:
-    ax.set_ylim(10**(-7.5), 10**(-3.5))
-    axIns = ax.inset_axes([0.27, 0.02, 0.45, 0.50], xlim=(0.40, 0.487), ylim=(10**(-6.7), 10**(-4.6)))
-    mark_inset(ax, axIns, loc1=2, loc2=4, fc="none", ec="0.5")
+    ax.set_ylim(10**(-8.0), 10**(-3.3))
+    axIns = ax.inset_axes([0.29, 0.08, 0.45, 0.50], xlim=(0.42, 0.492), ylim=(10**(-7.9), 10**(-5.3)))
+    mark_inset(ax, axIns, loc1=1, loc2=3, fc="none", ec="0.5")
     axIns.tick_params(axis="y", labelsize=8)
     axIns.set_facecolor("0.95")
     axIns.set_xscale("log", base=2)

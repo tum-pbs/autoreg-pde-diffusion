@@ -15,7 +15,7 @@ plt.rcParams['ps.fonttype'] = 42
 datasetName = "longer"
 modelMinMax = (0,3)
 evalMinMax = (0,5)
-sequenceMinMax = (1,2)
+sequenceMinMax = (2,3)
 timeMinMax = (0,240)
 
 predictionFolder = "results/sampling/%s" % datasetName
@@ -24,17 +24,21 @@ outputFolder = "results"
 models = {
     "Simulation": "groundTruth.dict",
 
-    #"ResNet": "resnet-s2.npz",
-    #"Dil-ResNet": "dil-resnet-s2.npz",
+    #"ResNet": "resnet-m2.npz",
+    #"Dil-ResNet": "dil-resnet-m2.npz",
 
-    #"FNO16": "fno-16modes-s2.npz",
-    #"FNO32": "fno-32modes-s2.npz",
+    #"FNO16": "fno-16modes-m2.npz",
+    #"FNO32": "fno-32modes-m2.npz",
 
     #"TF-MGN": "tf-mgn.npz",
     #"TF-Enc": "tf-enc.npz",
     #"TF-VAE": "tf-vae.npz",
 
-    #"U-Net": "unet-s2.npz",
+    #"U-Net": "unet-m2.npz",
+    #"U-Net-ut": "unet-m8.npz",
+    #"U-Net-tn": "unet-m2-noise0.01.npz",
+
+    #"Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
     #"ACDM-ncn": "direct-ddpm+Prev20_ncn.npz",
     "ACDM": "direct-ddpm+Prev20.npz",
@@ -143,7 +147,7 @@ for i in range(len(modelNames)):
         if useStd:
             #ax.fill_between(freq, lineMean[i] - lineStd[i], lineMean[i] + lineStd[i], facecolor=color, alpha=0.15)
             ax.fill_between(freq, lineQuantileLower[i], lineQuantileUpper[i], facecolor=color, alpha=0.15)
-#ax.legend()
+ax.legend()
 
 fig.tight_layout(pad=0.4)
 fig.savefig("%s/downstream_temp_freq_%s_%s.pdf" % (outputFolder, datasetName, field))

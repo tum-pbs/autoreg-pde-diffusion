@@ -145,17 +145,19 @@ class ModelParamsEncoder(object):
 
 
 class ModelParamsDecoder(object):
-    def __init__(self, arch="skip", pretrained=False, frozen=False, decWidth=48, vae=False, 
-                 diffSteps=500, diffSchedule="linear", diffCondIntegration="noisy", fnoModes=(16,16)):
+    def __init__(self, arch="skip", pretrained=False, frozen=False, decWidth=48, vae=False, trainingNoise=0.0,
+                 diffSteps=500, diffSchedule="linear", diffCondIntegration="noisy", fnoModes=(16,16), refinerStd=0.0):
         self.arch = arch                 # architecture variant
         self.pretrained = pretrained     # load pretrained weight initialization
         self.frozen = frozen             # freeze weights after initialization
         self.decWidth = decWidth         # width of decoder network
         self.vae = vae                   # use a variational AE setup
+        self.trainingNoise = trainingNoise # amount of training noise added to inputs
         self.diffSteps = diffSteps       # diffusion model diffusion time steps
         self.diffSchedule = diffSchedule # diffusion model variance schedule
         self.diffCondIntegration = diffCondIntegration # integrationg of conditioning during diffusion training
         self.fnoModes = fnoModes         # number of fourier modes for FNO setup
+        self.refinerStd = refinerStd     # noise standard dev. in pde refiner setup
 
     @classmethod
     def fromDict(cls, d:dict):
@@ -165,10 +167,12 @@ class ModelParamsDecoder(object):
         p.frozen       = d.get("frozen", False)
         p.decWidth     = d.get("decWidth", -1)
         p.vae          = d.get("vae", False)
+        p.trainingNoise= d.get("trainingNoise", 0.0)
         p.diffSteps    = d.get("diffSteps", 500)
         p.diffSchedule = d.get("diffSchedule", "linear")
         p.diffCondIntegration  = d.get("diffCondIntegration", "noisy")
         p.fnoModes     = d.get("fnoModes", ())
+        p.refinerStd   = d.get("refinerStd", 0.0)
         return p
 
     def asDict(self) -> dict:
@@ -178,10 +182,12 @@ class ModelParamsDecoder(object):
             "frozen"       : self.frozen,
             "decWidth"     : self.decWidth,
             "vae"          : self.vae,
+            "trainingNoise": self.trainingNoise,
             "diffSteps"    : self.diffSteps,
             "diffSchedule" : self.diffSchedule,
             "diffCondIntegration" : self.diffCondIntegration,
             "fnoModes"     : self.fnoModes,
+            "refinerStd"   : self.refinerStd,
         }
 
 

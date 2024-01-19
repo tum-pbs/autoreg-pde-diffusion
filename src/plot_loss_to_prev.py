@@ -30,24 +30,28 @@ outputFolder = "results"
 models = {
     "Simulation": "groundTruth.dict",
 
-    #"ResNet": "resnet-s2.npz",
-    "Dil-ResNet": "dil-resnet-s2.npz",
+    #"ResNet": "resnet-m2.npz",
+    "Dil-ResNet": "dil-resnet-m2.npz",
 
-    #"FNO16": "fno-16modes-s2.npz",
-    "FNO32": "fno-32modes-s2.npz",
+    #"FNO16": "fno-16modes-m2.npz",
+    "FNO32": "fno-32modes-m2.npz",
 
     #"TF-MGN": "tf-mgn.npz",
     "TF-Enc": "tf-enc.npz",
     #"TF-VAE": "tf-vae.npz",
 
-    #"U-Net": "unet-s2.npz",
+    "U-Net": "unet-m2.npz",
+    "U-Net-ut": "unet-m8.npz",
+    "U-Net-tn": "unet-m2-noise0.01.npz",
+
+    "Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
     "ACDM-ncn": "direct-ddpm+Prev%d_ncn.npz" % (100 if datasetName in ["zInterp"] else 20),
     "ACDM": "direct-ddpm+Prev%d.npz" % (100 if datasetName in ["zInterp"] else 20),
 }
 
 metric = "L1"
-useStd = True
+useStd = False
 
 
 modelNames = []
@@ -93,7 +97,7 @@ for modelName, modelPath in models.items():
     distanceStd += [torch.std(errorOverTime, dim=(0,1,2)).numpy()]
 
 
-fig, ax = plt.subplots(1, figsize=(4.5,1.8), dpi=150)
+fig, ax = plt.subplots(1, figsize=(5.0,2.5), dpi=150)
 #ax.set_title(getDatasetName(datasetName))
 ax.text(0.008, 0.018, getDatasetName(datasetName), color="k", bbox=dict(facecolor="whitesmoke", edgecolor="darkslategray", boxstyle="round"),
         horizontalalignment="left", verticalalignment="bottom", transform=ax.transAxes)
@@ -103,12 +107,13 @@ ax.set_xlabel("Time step $t$")
 ax.set_ylabel(r"$\Vert \, (s^{t} - s^{t-1}) / \Delta t \, \Vert_2^2$" if metric == "MSE" else r"$\Vert \, (s^{t} - s^{t-1}) / \Delta t \, \Vert_1$")
 ax.yaxis.grid(True)
 ax.set_axisbelow(True)
+#ax.set_ylim([0.005,0.025])
+#ax.set_ylim([0.003,0.021])
 #ax.set_ylim([0.012,0.021])
-#ax.set_ylim([0.0,0.02])
 #ax.set_ylim([0.0,0.05])
 #ax.set_ylim([0.0,0.025])
 ax.set_ylim([-0.005,0.05])
-#ax.set_ylim([-0.02,0.1])
+#ax.set_ylim([0.0,0.03])
 for i in range(len(modelNames)):
     color = getColor(modelNames[i])
     label = getModelName(modelNames[i])

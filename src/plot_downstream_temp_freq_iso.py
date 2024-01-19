@@ -24,17 +24,21 @@ outputFolder = "results"
 models = {
     "Simulation": "groundTruth.dict",
 
-    #"ResNet": "resnet-s2.npz",
-    "Dil-ResNet": "dil-resnet-s2.npz",
+    #"ResNet": "resnet-m2.npz",
+    "Dil-ResNet": "dil-resnet-m2.npz",
 
-    #"FNO16": "fno-16modes-s2.npz",
-    "FNO32": "fno-32modes-s2.npz",
+    #"FNO16": "fno-16modes-m2.npz",
+    "FNO32": "fno-32modes-m2.npz",
 
     #"TF-MGN": "tf-mgn.npz",
     "TF-Enc": "tf-enc.npz",
     #"TF-VAE": "tf-vae.npz",
 
-    "U-Net": "unet-s2.npz",
+    "U-Net": "unet-m2.npz",
+    "U-Net-ut": "unet-m8.npz",
+    "U-Net-tn": "unet-m2-noise0.01.npz",
+
+    "Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
     "ACDM-ncn": "direct-ddpm+Prev100_ncn.npz",
     "ACDM": "direct-ddpm+Prev100.npz",
@@ -112,7 +116,7 @@ for modelName, modelPath in models.items():
 
 
 
-fig, ax = plt.subplots(1, figsize=(4.5,1.8), dpi=150)
+fig, ax = plt.subplots(1, figsize=(5.0,2.3), dpi=150)
 ax.text(0.008, 0.018, getDatasetName(datasetName), color="k", bbox=dict(facecolor="whitesmoke", edgecolor="darkslategray", boxstyle="round"),
         horizontalalignment="left", verticalalignment="bottom", transform=ax.transAxes)
 if datasetName in ["extrap", "interp", "longer", "highRey", "lowRey", "varReyIn"]:
@@ -124,7 +128,7 @@ ax.set_xscale("log", base=2)
 ax.set_yscale("log", base=10)
 ax.yaxis.grid(True)
 ax.set_axisbelow(True)
-ax.set_ylim([10**2,2*10**4])
+#ax.set_ylim([10**2,2*10**4])
 for i in range(len(modelNames)):
     lineMean[i] = lineMean[i] * freq * freq
     lineStd[i] = lineStd[i] * freq * freq

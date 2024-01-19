@@ -17,9 +17,9 @@ modelMinMax = (0,1)
 evalMinMax = (0,1)
 #sequenceMinMax = (0,1)
 sequenceMinMax = (8,9)
-timeSteps = [4,29,99,149,199] if datasetName in ["lowRey", "highRey", "varReyIn"] else \
-            [4,29,99,149,199] if datasetName in ["interp", "extrap", "longer"] else \
-            [4,19,39,69,99]
+timeSteps = [4,29,84,139,194,249] if datasetName in ["lowRey", "highRey", "varReyIn"] else \
+            [4,29,79,129,179,229] if datasetName in ["interp", "extrap", "longer"] else \
+            [4,19,39,59,79,99]
 field = "vort"
 
 
@@ -28,17 +28,21 @@ outputFolder = "results"
 
 models = {
     "Simulation": "groundTruth.dict",
-    "ResNet": "resnet-s2.npz",
-    "Dil-ResNet": "dil-resnet-s2.npz",
+    "ResNet": "resnet-m2.npz",
+    "Dil-ResNet": "dil-resnet-m2.npz",
 
-    "FNO16": "fno-16modes-s2.npz",
-    "FNO32": "fno-32modes-s2.npz",
+    "FNO16": "fno-16modes-m2.npz",
+    "FNO32": "fno-32modes-m2.npz",
 
     "TF-MGN": "tf-mgn.npz",
     "TF-Enc": "tf-enc.npz",
     "TF-VAE": "tf-vae.npz",
 
-    "U-Net": "unet-s2.npz",
+    "U-Net": "unet-m2.npz",
+    "U-Net-ut": "unet-m8.npz",
+    "U-Net-tn": "unet-m2-noise0.01.npz",
+
+    "Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
     "ACDM-ncn": "direct-ddpm+Prev%d_ncn.npz" % (100 if datasetName in ["zInterp"] else 20),
     "ACDM-bold": "direct-ddpm+Prev%d.npz" % (100 if datasetName in ["zInterp"] else 20),
@@ -83,7 +87,7 @@ for modelName, modelPath in models.items():
 
 
 
-fig, axs = plt.subplots(nrows=len(modelNames), ncols=len(timeSteps), figsize=(8.5,10.0), dpi=250, squeeze=False)
+fig, axs = plt.subplots(nrows=len(modelNames), ncols=len(timeSteps), figsize=(9.5,13.5), dpi=250, squeeze=False)
 for i in range(len(modelNames)):
     for j in range(len(timeSteps)):
         if i == len(modelNames)-1:

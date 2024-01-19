@@ -24,17 +24,21 @@ outputFolder = "results"
 models = {
     "Simulation": "groundTruth.dict",
 
-    #"ResNet": "resnet-s2.npz",
-    #"Dil-ResNet": "dil-resnet-s2.npz",
+    #"ResNet": "resnet-m2.npz",
+    #"Dil-ResNet": "dil-resnet-m2.npz",
 
-    #"FNO16": "fno-16modes-s2.npz",
-    #"FNO32": "fno-32modes-s2.npz",
+    #"FNO16": "fno-16modes-m2.npz",
+    #"FNO32": "fno-32modes-m2.npz",
 
     #"TF-MGN": "tf-mgn.npz",
     #"TF-Enc": "tf-enc.npz",
     #"TF-VAE": "tf-vae.npz",
 
-    #"U-Net": "unet-s2.npz",
+    #"U-Net": "unet-m2.npz",
+    #"U-Net-ut": "unet-m8.npz",
+    #"U-Net-tn": "unet-m2-noise0.01.npz",
+
+    #"Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
     #"ACDM-ncn": "direct-ddpm+Prev20_ncn.npz",
     "ACDM": "direct-ddpm+Prev20.npz",
