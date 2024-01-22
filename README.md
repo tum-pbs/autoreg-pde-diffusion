@@ -9,6 +9,22 @@ This repository contains the source code for the paper [Benchmarking Autoregress
 
 4. **Latent-Space Transformers**: Finally, we provide different implementation variants of latent-space transformers. These architectures contain an autoencoder to embed the flow states in a smaller latent space. A secondary transformer model computes updated latent spaces forward in time, that can be decoded to create flow trajectories. We train the combined architecture end-to-end.
 
+
+All architectures are evaluated on three carefully designed data sets of varying difficulty:
+
+1. **Incompressible Wake Flow (*Inc*):** This relatively simple data set contains 91 incompressible wake flow trajectories simulated with PhiFlow at Reynolds numbers 100-1000. Each sequence contains 1300 temporal snapshots of pressure and velocity.
+
+https://ge.in.tum.de/download/autoreg-pde-diffusion/video_data/predictions_full_inc_var_vort.mp4
+
+2. **Transonic Cylinder Flow (*Tra*):** This data set contains 41 sequences of a two-dimensional transonic cylinder flow simulated with the fluid solver SU2. Each sequence has a different Mach number between 0.5 and 0.9 at Reynolds number 10000, making the flows in the transonic regime highly chaotic. All trajcetories feature 1000 temporal snapshots of pressure, density, and velocity.
+
+https://ge.in.tum.de/download/autoreg-pde-diffusion/video_data/predictions_full_tra_long_pres.mp4
+
+3. **Isotropic Turbulence (*Iso*):** This highly complex, underdetermined data set consists of 1000 two-dimensional sequences sliced from three-dimensional, isotropic turbulence simulations. The flows were computed with DNS and the raw data is provided by the Johns Hopkins Turbulence Database. Each sequence contains 1000 temporal snapshots of pressure and velocity, including the velocity z-component.
+
+https://ge.in.tum.de/download/autoreg-pde-diffusion/video_data/predictions_full_iso_vort.mp4
+
+
 Further information about this work can be also found at our [project website](https://ge.in.tum.de/publications/2023-acdm-kohl/). Feel free to contact us if you have questions or suggestions regarding our work or the source code provided here.
 
 -----------------------------------------------------------------------------------------------------
