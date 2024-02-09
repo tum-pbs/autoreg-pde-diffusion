@@ -17,6 +17,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 outFolder = "results/sampling"
+modelFolder = "models/models_inc"
 
 testSets = {
     "lowRey":
@@ -36,9 +37,10 @@ numEvals = 5
 models = {
     "tf-enc":
         (
-            ["runs/2D_Inc/128_tf-enc_MSE_00/Model.pth",
-            "runs/2D_Inc/128_tf-enc_MSE_01/Model.pth",
-            "runs/2D_Inc/128_tf-enc_MSE_02/Model.pth",
+            [
+            "128_tf-enc_00/Model.pth",
+            "128_tf-enc_01/Model.pth",
+            "128_tf-enc_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -47,9 +49,10 @@ models = {
 
     "tf-vae":
         (
-            ["runs/2D_Inc/128_tf-vae_MSE_00/Model.pth",
-            "runs/2D_Inc/128_tf-vae_MSE_01/Model.pth",
-            "runs/2D_Inc/128_tf-vae_MSE_MSE_02/Model.pth",
+            [
+            "128_tf-vae_00/Model.pth",
+            "128_tf-vae_01/Model.pth",
+            "128_tf-vae_02/Model.pth",
             ],
             {"lowRey": 4, "highRey": 4, "varReyIn": 1},
             {"numEvals": numEvals,
@@ -59,9 +62,10 @@ models = {
 
     "tf-mgn":
         (
-            ["runs/2D_Inc/128_tf-mgn_MSE_00/Model.pth",
-            "runs/2D_Inc/128_tf-mgn_MSE_01/Model.pth",
-            "runs/2D_Inc/128_tf-mgn_MSE_02/Model.pth",
+            [
+            "128_tf-mgn_00/Model.pth",
+            "128_tf-mgn_01/Model.pth",
+            "128_tf-mgn_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -71,9 +75,10 @@ models = {
 
     "unet-m2":
         (
-            ["runs/2D_Inc/128_unet-m2_MSE_00/Model.pth",
-            "runs/2D_Inc/128_unet-m2_MSE_01/Model.pth",
-            "runs/2D_Inc/128_unet-m2_MSE_02/Model.pth",
+            [
+            "128_unet-m2_00/Model.pth",
+            "128_unet-m2_01/Model.pth",
+            "128_unet-m2_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -82,9 +87,10 @@ models = {
 
     "unet-m8":
         (
-            ["runs/2D_Inc/128_unet-m8_MSE_00/Model.pth",
-            "runs/2D_Inc/128_unet-m8_MSE_01/Model.pth",
-            "runs/2D_Inc/128_unet-m8_MSE_02/Model.pth",
+            [
+            "128_unet-m8_00/Model.pth",
+            "128_unet-m8_01/Model.pth",
+            "128_unet-m8_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -93,9 +99,10 @@ models = {
 
     "unet-m2-noise0.01":
         (
-            ["runs/2D_Inc/128_unet-m2-noise0.01_MSE_00/Model.pth",
-            "runs/2D_Inc/128_unet-m2-noise0.01_MSE_01/Model.pth",
-            "runs/2D_Inc/128_unet-m2-noise0.01_MSE_02/Model.pth",
+            [
+            "128_unet-m2-noise0.01_00/Model.pth",
+            "128_unet-m2-noise0.01_01/Model.pth",
+            "128_unet-m2-noise0.01_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -103,11 +110,12 @@ models = {
         ),
 
 
-    "refiner4_std0.000001":
+    "refiner-r4_std0.000001":
        (
-            ["runs/2D_Inc/128_refiner4_std0.000001_00/Model.pth",
-            "runs/2D_Inc/128_refiner4_std0.000001_01/Model.pth",
-            "runs/2D_Inc/128_refiner4_std0.000001_02/Model.pth",
+            [
+            "128_refiner-r4_std0.000001_00/Model.pth",
+            "128_refiner-r4_std0.000001_01/Model.pth",
+            "128_refiner-r4_std0.000001_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 4},
             {"numEvals": numEvals,
@@ -118,9 +126,10 @@ models = {
 
     "resnet-m2":
         (
-            ["runs/2D_Inc/128_resnet-m2_MSE_00/Model.pth",
-            "runs/2D_Inc/128_resnet-m2_MSE_01/Model.pth",
-            "runs/2D_Inc/128_resnet-m2_MSE_02/Model.pth",
+            [
+            "128_resnet-m2_00/Model.pth",
+            "128_resnet-m2_01/Model.pth",
+            "128_resnet-m2_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -129,9 +138,10 @@ models = {
 
     "dil-resnet-m2":
         (
-            ["runs/2D_Inc/128_dil-resnet-m2_MSE_00/Model.pth",
-            "runs/2D_Inc/128_dil-resnet-m2_MSE_01/Model.pth",
-            "runs/2D_Inc/128_dil-resnet-m2_MSE_02/Model.pth",
+            [
+            "128_dil-resnet-m2_00/Model.pth",
+            "128_dil-resnet-m2_01/Model.pth",
+            "128_dil-resnet-m2_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -141,9 +151,10 @@ models = {
 
     "fno-16modes-m2":
         (
-            ["runs/2D_Inc/128_fno-16modes-m2_MSE_00/Model.pth",
-            "runs/2D_Inc/128_fno-16modes-m2_MSE_01/Model.pth",
-            "runs/2D_Inc/128_fno-16modes-m2_MSE_02/Model.pth",
+            [
+            "128_fno-16modes-m2_00/Model.pth",
+            "128_fno-16modes-m2_01/Model.pth",
+            "128_fno-16modes-m2_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -152,9 +163,10 @@ models = {
 
     "fno-32modes-m2":
         (
-            ["runs/2D_Inc/128_fno-32modes-m2_MSE_00/Model.pth",
-            "runs/2D_Inc/128_fno-32modes-m2_MSE_01/Model.pth",
-            "runs/2D_Inc/128_fno-32modes-m2_MSE_02/Model.pth",
+            [
+            "128_fno-32modes-m2_00/Model.pth",
+            "128_fno-32modes-m2_01/Model.pth",
+            "128_fno-32modes-m2_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 1},
             {"numEvals": 1,
@@ -162,11 +174,12 @@ models = {
         ),
 
 
-    "direct-ddpm+Prev20":
+    "acdm-r20":
        (
-            ["runs/2D_Inc/128_direct-ddpm+Prev20_00/Model.pth",
-            "runs/2D_Inc/128_direct-ddpm+Prev20_01/Model.pth",
-            "runs/2D_Inc/128_direct-ddpm+Prev20_02/Model.pth",
+            [
+            "128_acdm-r20_00/Model.pth",
+            "128_acdm-r20_01/Model.pth",
+            "128_acdm-r20_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 4},
             {"numEvals": numEvals,
@@ -178,11 +191,12 @@ models = {
            },
        ),
 
-    "direct-ddpm+Prev20_ncn":
+    "acdm-r20_ncn":
        (
-            ["runs/2D_Inc/128_direct-ddpm+Prev20_ncn_00/Model.pth",
-            "runs/2D_Inc/128_direct-ddpm+Prev20_ncn_01/Model.pth",
-            "runs/2D_Inc/128_direct-ddpm+Prev20_ncn_02/Model.pth",
+            [
+            "128_acdm-r20_ncn_00/Model.pth",
+            "128_acdm-r20_ncn_01/Model.pth",
+            "128_acdm-r20_ncn_02/Model.pth",
             ],
             {"lowRey": 8, "highRey": 8, "varReyIn": 4},
             {"numEvals": numEvals,
@@ -247,7 +261,7 @@ for modelName, modelData in models.items():
 
         timerFullStart = time.perf_counter()
         for modelPath in modelPaths:
-            model = PredictionModel.load(modelPath, useGPU=device=="cuda")
+            model = PredictionModel.load(os.path.join(modelFolder, modelPath), useGPU=device=="cuda")
             model.eval()
 
             if isinstance(model.modelDecoder, DiffusionModel):

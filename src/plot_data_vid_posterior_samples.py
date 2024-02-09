@@ -30,8 +30,8 @@ outputFolder = "results"
 models = {
     "Simulation": "groundTruth.dict",
     #"TF-VAE": "tf-vae.npz",
-    #"Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
-    "ACDM": "direct-ddpm+Prev%d.npz" % (100 if datasetName in ["zInterp"] else 20),
+    #"Refiner": "refiner-r4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
+    "ACDM": "acdm%d.npz" % (100 if datasetName in ["zInterp"] else 20),
 }
 
 

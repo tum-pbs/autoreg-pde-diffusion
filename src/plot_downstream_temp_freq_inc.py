@@ -38,10 +38,10 @@ models = {
     #"U-Net-ut": "unet-m8.npz",
     #"U-Net-tn": "unet-m2-noise0.01.npz",
 
-    #"Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
+    #"Refiner": "refiner-r4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
-    #"ACDM-ncn": "direct-ddpm+Prev20_ncn.npz",
-    "ACDM": "direct-ddpm+Prev20.npz",
+    #"ACDM-ncn": "acdm20_ncn.npz",
+    "ACDM": "acdm20.npz",
 }
 
 cylsDownstream = 1.0

@@ -22,7 +22,7 @@ if __name__ == "__main__":
     #torch.cuda.manual_seed(1)
 
     ### ACDM
-    modelName = "2D_Inc/128_direct-ddpm+Prev20"
+    modelName = "2D_Inc/128_acdm-r20"
     p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[3,2], randSeqOffset=True,
                 dataSize=[128,64], dimension=2, simFields=["pres"], simParams=["rey"], normalizeMode="incMixed")
     p_t = TrainingParams(epochs=3100, lr=0.0001)
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
 
     ### ACDM_ncn
-    # modelName = "2D_Inc/128_direct-ddpm+Prev20_ncn"
+    # modelName = "2D_Inc/128_acdm-r20_ncn"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[3,2], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["pres"], simParams=["rey"], normalizeMode="incMixed")
     # p_t = TrainingParams(epochs=3100, lr=0.0001)
@@ -45,8 +45,8 @@ if __name__ == "__main__":
     # pretrainPath = ""
 
 
-    ### Refiner4_std0.000001
-    # modelName = "2D_Inc/128_refiner4_std0.000001"
+    ### Refiner-r4_std0.000001
+    # modelName = "2D_Inc/128_refiner-r4_std0.000001"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,2], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["pres"], simParams=["rey"], normalizeMode="incMixed")
     # p_t = TrainingParams(epochs=3000, lr=0.0001)

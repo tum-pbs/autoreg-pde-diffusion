@@ -22,7 +22,7 @@ if __name__ == "__main__":
     #torch.cuda.manual_seed(1)
 
     ### UNET
-    modelName = "2D_Iso/128_unet-m2_MSE"
+    modelName = "2D_Iso/128_unet-m2"
     p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,1], randSeqOffset=True,
                 dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     p_t = TrainingParams(epochs=100, lr=0.0001)
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     pretrainPath = ""
 
     ### UNET_ut
-    # modelName = "2D_Iso/128_unet-m8_MSE"
+    # modelName = "2D_Iso/128_unet-m8"
     # p_d = DataParams(batch=16, augmentations=["normalize"], sequenceLength=[8,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=100, lr=0.0001)
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     # pretrainPath = ""
 
     ### UNET_tn
-    # modelName = "2D_Iso/128_unet-m2-noise0.01_MSE"
+    # modelName = "2D_Iso/128_unet-m2-noise0.01"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=100, lr=0.0001)
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
 
     ### RESNET
-    # modelName = "2D_Iso/128_resnet-m2_MSE"
+    # modelName = "2D_Iso/128_resnet-m2"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=100, lr=0.0001)
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     # pretrainPath = ""
 
     ### RESNET_dil.
-    # modelName = "2D_Iso/128_dil-resnet-m2_MSE"
+    # modelName = "2D_Iso/128_dil-resnet-m2"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=100, lr=0.0001)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
 
     ### FNO_16
-    # modelName = "2D_Iso/128_fno-16modes-m2_MSE"
+    # modelName = "2D_Iso/128_fno-16modes-m2"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=200, lr=0.0001)
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     # pretrainPath = ""
 
     ### FNO_32
-    # modelName = "2D_Iso/128_fno-32modes-m2_MSE"
+    # modelName = "2D_Iso/128_fno-32modes-m2"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=200, lr=0.0001)
@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
 
     ### TF_Enc
-    # modelName = "2D_Iso/128_tf-enc_MSE"
+    # modelName = "2D_Iso/128_tf-enc"
     # p_d = DataParams(batch=8, augmentations=["normalize"], sequenceLength=[50,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=200, lr=0.0001, fadeInSeqLen=[40,160], fadeInSeqLenLin=True)
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     # pretrainPath = ""
 
     ### TF_VAE
-    # modelName = "2D_Iso/128_tf-vae_MSE"
+    # modelName = "2D_Iso/128_tf-vae"
     # p_d = DataParams(batch=8, augmentations=["normalize"], sequenceLength=[50,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=200, lr=0.0001, fadeInSeqLen=[40,160], fadeInSeqLenLin=True)
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     # pretrainPath = ""
 
     ### TF_MGN
-    # modelName = "2D_Iso/128_tf-mgn_MSE"
+    # modelName = "2D_Iso/128_tf-mgn"
     # p_d = DataParams(batch=8, augmentations=["normalize"], sequenceLength=[50,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=200, lr=0.0001, fadeInSeqLen=[40,160], fadeInSeqLenLin=True)

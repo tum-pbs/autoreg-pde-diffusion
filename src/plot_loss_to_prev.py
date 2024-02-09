@@ -44,10 +44,10 @@ models = {
     "U-Net-ut": "unet-m8.npz",
     "U-Net-tn": "unet-m2-noise0.01.npz",
 
-    "Refiner": "refiner4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
+    "Refiner": "refiner-r4_std%s.npz" % ("0.00001" if datasetName in ["zInterp"] else "0.000001"),
 
-    "ACDM-ncn": "direct-ddpm+Prev%d_ncn.npz" % (100 if datasetName in ["zInterp"] else 20),
-    "ACDM": "direct-ddpm+Prev%d.npz" % (100 if datasetName in ["zInterp"] else 20),
+    "ACDM-ncn": "acdm%d_ncn.npz" % (100 if datasetName in ["zInterp"] else 20),
+    "ACDM": "acdm%d.npz" % (100 if datasetName in ["zInterp"] else 20),
 }
 
 metric = "L1"

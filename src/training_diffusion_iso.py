@@ -22,7 +22,7 @@ if __name__ == "__main__":
     #torch.cuda.manual_seed(1)
 
     ### ACDM
-    modelName = "2D_Iso/128_direct-ddpm+Prev100"
+    modelName = "2D_Iso/128_acdm-r100"
     p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[3,1], randSeqOffset=True,
                 dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     p_t = TrainingParams(epochs=100, lr=0.0001)
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
 
     ### ACDM_ncn
-    # modelName = "2D_Iso/128_direct-ddpm+Prev100_ncn"
+    # modelName = "2D_Iso/128_acdm-r100_ncn"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[3,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=100, lr=0.0001)
@@ -45,8 +45,8 @@ if __name__ == "__main__":
     # pretrainPath = ""
 
 
-    ### Refiner4_std0.00001
-    # modelName = "2D_Iso/128_refiner4_std0.00001"
+    ### Refiner-r4_std0.00001
+    # modelName = "2D_Iso/128_refiner-r4_std0.00001"
     # p_d = DataParams(batch=64, augmentations=["normalize"], sequenceLength=[2,1], randSeqOffset=True,
     #             dataSize=[128,64], dimension=2, simFields=["velZ", "pres"], simParams=[], normalizeMode="isoSingle")
     # p_t = TrainingParams(epochs=100, lr=0.0001)

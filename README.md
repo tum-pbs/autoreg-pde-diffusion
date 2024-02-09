@@ -33,33 +33,83 @@ Further information about this work can be also found at our [project website](h
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tum-pbs/autoreg-pde-diffusion/blob/master/acdm-demo.ipynb)
 
-Using the button above, you can run a simple example notebook in Google Colab that demonstrates ACDM (a Google account is required). Instead, it is also possible to locally run the provided `acdm-demo.ipynb` file, by following the [installation instructions](#installation) in the next section and [running the notebook](https://docs.jupyter.org/en/latest/running.html) inside the created conda environment afterwards.
+Using the button above, you can run a simple example notebook in Google Colab that demonstrates ACDM (a Google account is required). Instead, it is also possible to locally run the provided `acdm-demo.ipynb` file, by following the installation instructions in the next section and [running the notebook](https://docs.jupyter.org/en/latest/running.html) inside the created conda environment afterwards.
 
 
 ## Installation
 In the following, Linux is assumed as the OS but the installation on Windows should be similar.
 
-We recommend to install the required python packages (see `requirements.yml`) via a conda environment (e.g. using [miniconda](https://docs.conda.io/en/latest/miniconda.html)), but it may be possible to install them with *pip* (e.g. via *venv* for a separate environment) as well.
+We recommend to install the required python packages (see `requirements.yml`) via a conda environment (e.g. using [miniconda](https://docs.conda.io/en/latest/miniconda.html)), but it may be possible to directly install them with *pip* (e.g. via *venv* for a separate environment) as well.
 ```shell
 conda env create -f requirements.yml
 conda activate ACDM
 ```
-In the following, all commands should be run from the root directory of this source code. Running the training or sampling code in the `src` directory requires the generation of data sets as described in the following.
+In the following, all commands should be run from the root directory of this source code.
 
+## Directory Structure and Basic Usage
+The directory `src/turbpred` contains the general code base of this project. The `src/lsim` directory contains the [LSiM metric](https://github.com/tum-pbs/LSIM) that is used for evaluations. The `data` directory contains data generation scripts, and downloaded or generated data sets should end up there as well. The `models` directory contains pretrained model checkpoints once they are downloaded (see below). The `runs` directory contains model checkpoints as well as further log files when training models from scratch. The `results` directory contains the results from the sampling, evaluation, and plotting scripts. Sampled model predictions are written to this directory as compressed numpy arrays. These arrays are read by the plotting scripts, which in turn write the resulting plots to the `results` directory as well.
 
-## Model Training, Sampling, and Evaluation
-Once the data sets are generated, model architectures can be trained using the scripts `src/training_*.py`, trained models can be sampled with `src/sample_models_*.py`, and model predictions can be evaluated and visualized with `src/plot_*.py`. Each script contains various configuration options and architecture selections at the beginning of the file. All files should be run according to the following pattern:
+The scripts in `src` contain the main training, sampling, and plotting functionality. Each script contains various configuration options and architecture selections at the beginning of the file. All files should be run directly with Python according to the following pattern:
 ```shell
 python src/training_*.py
 python src/sample_models_*.py
 python src/plot_*.py
 ```
 
-## Directory Structure
-The directory `src/turbpred` contains the general code base that the training and sampling scripts rely on. The `src/lsim` directory contains the [LSiM metric](https://github.com/tum-pbs/LSIM) that is used for evaluations. The `data` directory contains data generation scripts, and downloaded or generated data sets should end up there as well. The `runs` directory contains the trained models which are loaded by the sampling scripts, as well as further checkpoints and log files. The `results` directory contains the results from the sampling, evaluation, and plotting scripts. Sampled model predictions are written to this directory as compressed numpy arrays, that are read by the plotting scripts, which in turn write the resulting plots to the same directory.
+
+-----------------------------------------------------------------------------------------------------
 
 
-## Training Monitoring with Tensorboard
+## Downloading our Data and Models
+
+Our data sets can be downloaded via any web browser, `ftp`, or `rsync` here: [http://doi.org/10.14459/2024mp1734798](http://doi.org/10.14459/2024mp1734798) (**rsync password: m1734798.001**). Use this command to directly download all data sets at the training and evaluation resolution of $128 \times 64$ (about 146 GB):
+```shell
+rsync -P rsync://m1734798.001@dataserv.ub.tum.de/m1734798.001/128_* ./data
+```
+Once the download is complete, the data set archives can be extracted with:
+```shell
+unzip -o -d data "data/128_*.zip"
+```
+
+To separately download the individiual data subsets, replace the `128_*` path in the `rsync` and `unzip` commands above with one of the following archive names:
+
+Archive Name | Size | Description
+---|---|---
+128_inc.zip | 13.8 GB | Data set $\texttt{Inc}$ of incompressible wake flows with Reynolds numbers $100 - 1000$ at training resolution $128 \times 64$
+128_tra.zip | 12.1 GB | Data set $\texttt{Tra}$ of compressible cylinder flows with Mach numbers $0.5 - 0.9$ at training resolution $128 \times 64$
+128_iso.zip | 119.8 GB | Data set $\texttt{Iso}$ with isotropic turbulence data from the JHTDB at training resolution $128 \times 64$
+256_inc.zip | 44.3 GB | High-resolution version of $\texttt{Inc}$ at the simulation resolution $256 \times 128$
+256_tra.zip | 42.0 GB | High-resolution version of $\texttt{Tra}$ at resolution $256 \times 128$
+128_tra_small.zip | 301 MB | Small subset from $\texttt{Tra}$ consisting of a single flow trajectory with Mach number $0.7$ at resolution $128 \times 64$
+checkpoints.zip | 1.9 GB | Pretrained model checkpoints for each investigated architecture and data set
+checkpoints_acdm_tra.zip | 75 MB | Small subset of the checkpoints file consisting of the ACDM architecture on the $\texttt{Tra}$ data set
+(checksums.sha512) | (1.0 KB) | (Checksum file only used to check archive validity)
+
+
+Pretrained model weights for each data set and investigated architecture can be downloaded and extraced in the same way as described for the data above (**rsync password: m1734798.001**):
+```shell
+rsync -P rsync://m1734798.001@dataserv.ub.tum.de/m1734798.001/checkpoints.zip ./models
+unzip -o -d models "models/checkpoints.zip"
+```
+The model checkpoints can be directly sampled on the downloaded data sets with the `src/sample_models_*.py` scripts.
+
+If problems with the .zip archives occur, it is recommended to check them for corruption. This can be achieved by comparing the SHA512 hash of  downloaded files with the corresponding content of the provided checksum file. The checksums for the downloaded archives can be downloaded and checked via (**rsync password: m1734798.001**):
+```shell
+rsync -P rsync://m1734798.001@dataserv.ub.tum.de/m1734798.001/checksums.sha512 ./data
+cd data
+sha512sum -c --ignore-missing checksums.sha512
+```
+If the hashes do not match, restart the download or try a different download method. 
+
+
+
+-----------------------------------------------------------------------------------------------------
+
+## Model Training from Scratch
+Once the data sets are downloaded or generated, model architectures can be trained from scratch using the `src/training_*.py` scripts. The resulting model checkpoints are identical to the downloaded models described above. The training scripts contain different various configuration options and an architecture selection at the beginning of the file.
+
+
+### Training Monitoring with Tensorboard
 During training, various values, statistics and plots are logged to Tensorboard, allowing for monitoring the training progress. To start Tensorboard, use the following command:
 ```shell
 tensorboard --logdir=runs --port=6006
@@ -70,13 +120,12 @@ and open http://localhost:6006/ in your browser to inspect the logged data.
 
 -----------------------------------------------------------------------------------------------------
 
-## Data Generation, Download, and Processing
-
-### Downloading our Data
-
-Our simulated data sets will be available to download soon! Thus, all data sets have to be generated locally for now as described below.
+## Data Generation from Scratch and Data Processing
 
 ### Generation with PhiFlow: Incompressible Wake Flow (*Inc*)
+<details>
+<summary>Click to expand detailed PhiFlow generation instructions</summary>
+
 ![Vorticity Plot Inc](results/plot_inc_vorticity.png)
 
 To generate data with the fluid solver PhiFlow, perform the following steps:
@@ -87,9 +136,13 @@ To generate data with the fluid solver PhiFlow, perform the following steps:
 5. Adjust paths and settings in the python generation file if necessary, and run it or alternatively the batch script to generate the data.
 6. Copy or move the generated data set directory to the `data` directory of this source code for training. Make sure to follow the data set structure described below.
 
+</details>
 
 
 ### Generation with SU2: Transonic Cylinder Flow (*Tra*)
+<details>
+<summary>Click to expand detailed SU2 generation instructions</summary>
+
 ![Pressure Plot Tra](results/plot_tra_pressure.png)
 
 To generate data with the fluid solver SU2, perform the following steps:
@@ -107,9 +160,13 @@ python SU2_raw/data_generation.py 112 10000 0.60,0.70,0.80 0,1,2 -1
 5. Copy or move the generated data set directory to the `data` directory of this source code for training.
 6. Post-process the data set directory structure with the `src/convert_SU2_structure.py` script (adjust script settings if necessary), that also extracts some information from the auxiliary simulation files. Make sure that the converted data directory follows the data set structure described below.
 
+</details>
 
 
 ### Download from the Johns Hopkins Turbulence Database: Isotropic Turbulence (*Iso*)
+<details>
+<summary>Click to expand detailed JHTDB download instructions</summary>
+
 ![Vorticity Plot Iso](results/plot_iso_vorticity.png)
 
 To extract sequences from the [Johns Hopkins Turbulence Database](http://turbulence.pha.jhu.edu/), the required steps are:
@@ -118,7 +175,7 @@ To extract sequences from the [Johns Hopkins Turbulence Database](http://turbule
 3. Adjust the paths and settings in the script file if necessary, and run the script to download and convert the corresponding regions of the DNS data. The script `data/generation_scripts/JHTDB/get_JHTDB_scheduler.py` can be run instead as well. It reconnects to the data base automatically in case the connection is unstable or is otherwise interrupted, and resumes the download.
 4. Copy or move the downloaded data set directory to the `data` directory of this source code for training if necessary. Make sure to follow the data set structure described below.
 
-
+</details>
 
 
 ### Data Set Structure
@@ -132,7 +189,7 @@ Ensure that the data set folder structure resulting from the data generation is 
 -----------------------------------------------------------------------------------------------------
 
 ## Citation
-If you use the source code or data sets provided here, please consider citing our work:
+If you use the source code, models, or data sets provided here, please consider citing our work:
 ```
 @article{kohl2023_acdm,
   author = {Georg Kohl and Li{-}Wei Chen and Nils Thuerey},
