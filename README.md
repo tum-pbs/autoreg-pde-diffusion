@@ -1,5 +1,5 @@
 # Benchmarking Autoregressive Conditional Diffusion Models for Turbulent Flow Simulation
-This repository contains the source code for the paper [Benchmarking Autoregressive Conditional Diffusion Models for Turbulent Flow Simulation](https://arxiv.org/abs/2309.01745) by [Georg Kohl](https://ge.in.tum.de/about/georg-kohl/), [Liwei Chen](https://ge.in.tum.de/about/dr-liwei-chen/), and [Nils Thuerey](https://ge.in.tum.de/about/n-thuerey/). Our work benchmarks the prediction of turbulent flow fields from an initial condition across a range of architectures:
+This repository contains the source code for the paper [Benchmarking Autoregressive Conditional Diffusion Models for Turbulent Flow Simulation](https://arxiv.org/abs/2309.01745) by [Georg Kohl](https://ge.in.tum.de/about/georg-kohl/), [Liwei Chen](https://ge.in.tum.de/about/dr-liwei-chen/), and [Nils Thuerey](https://ge.in.tum.de/about/n-thuerey/). Our work benchmarks neural operators for the prediction of turbulent flow fields from an initial condition across a range of architectures:
 
 1. **Autoregressive conditional diffusion models (ACDMs):** This method relies on the DDPM approach, a class of generative models based on a parameterized Markov chain. They can be trained to learn the conditional distribution of a target variable given a conditioning. In our case, the target variable is the flow field at the next time step, and the conditioning is the flow field at the current time step, i.e., the simulation trajectory is created via autoregressive unrolling of the model. We showed that ACDMs can accurately and probabilistically predict turbulent flow fields, and that the resulting trajectories align with the statistics of the underlying physics. Furthermore, ACDMs can generalize to flow parameters beyond the training regime, and exhibit high temporal rollout stability, without compromising the quality of generated samples.
 
@@ -57,11 +57,10 @@ python src/plot_*.py
 ```
 
 
+
 -----------------------------------------------------------------------------------------------------
 
-
 ## Downloading our Data and Models
-
 Our data sets can be downloaded via any web browser, `ftp`, or `rsync` here: [http://doi.org/10.14459/2024mp1734798](http://doi.org/10.14459/2024mp1734798) (**rsync password: m1734798.001**). Use this command to directly download all data sets at the training and evaluation resolution of $128 \times 64$ (about 146 GB):
 ```shell
 rsync -P rsync://m1734798.001@dataserv.ub.tum.de/m1734798.001/128_* ./data
@@ -179,11 +178,19 @@ To extract sequences from the [Johns Hopkins Turbulence Database](http://turbule
 
 
 ### Data Set Structure
-Ensure that the data set folder structure resulting from the data generation is the following to ensure the data set can be loaded correctly: `data/[datasetName]/sim_[simNr]/[field]_[timestep].npz`. Here datasetName is any string, but has to be adjusted accordingly when creating data set objects. The simulation folder numbers should be integers with a fixed width of six digits and increae continuously. Similarly, the timestep numbering should consist of integers with a fixed width of six digits and increase continuously. Start and end points for both can be configured when creating Dataset objects. Fields should be strings that describe the physical quantity, such as pressure, density, or velocity. Velocity components are typically stored in a single array, apart from the *Iso* case where the velocity z-component is stored separately as velocityZ. For example, a density snapshot at timestep zero from the *Tra* data set is referenced as `data/128_tra/sim_000000/density_000000.npz`.
+Ensure that the data set folder structure resulting from the data generation is the following to ensure the data set can be loaded correctly: `data/[datasetName]/sim_[simNr]/[field]_[timestep].npz`. Here datasetName is any string, but has to be adjusted accordingly when creating data set objects. The simulation folder numbers should be integers with a fixed width of six digits and increase continuously. Similarly, the timestep numbering should consist of integers with a fixed width of six digits and increase continuously. Start and end points for both can be configured when creating Dataset objects. Fields should be strings that describe the physical quantity, such as pressure, density, or velocity. Velocity components are typically stored in a single array, apart from the *Iso* case where the velocity z-component is stored separately as velocityZ. For example, a density snapshot at timestep zero from the *Tra* data set is referenced as `data/128_tra/sim_000000/density_000000.npz`.
 
 
 ### General Data Post-Processing
 `src/copy_data_lowres.py` can be used to downsample the generation resolution of `256x128` to the training and evaluation resolution of `128x64` for the simulated data sets. It processes all .npz data files, while creating copies of all supplementary files in the input directory. Computing mean and standard deviation statistics for the data normalization to a standard normal distribution is performed via `src/compute_data_mean_std.py`.
+
+
+
+-----------------------------------------------------------------------------------------------------
+
+## Experiments on Extremely Long Rollouts
+On the *Inc* and *Tra* data sets dicussed above, we observed that it is possible to train models that are unconditionally stable and do not diverge, even after `200 000` rollout steps. Key criteria for training models with such stability are outlined [here](long-rollouts.md).
+
 
 
 -----------------------------------------------------------------------------------------------------
