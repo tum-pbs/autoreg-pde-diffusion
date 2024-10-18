@@ -128,13 +128,22 @@ and open http://localhost:6006/ in your browser to inspect the logged data.
 ![Vorticity Plot Inc](results/plot_inc_vorticity.png)
 
 To generate data with the fluid solver PhiFlow, perform the following steps:
-1. Download the [PhiFlow source code](https://github.com/tum-pbs/PhiFlow) and follow the [installation instructions](https://tum-pbs.github.io/PhiFlow/Installation_Instructions.html). We use the PyTorch backend, that should work out of the box with a correction installation of PhiFlow. **Our scripts assume the usage of version 2.0.3 at commit [abc82af2](https://github.com/tum-pbs/PhiFlow/tree/abc82af247a4f9de49a0d246277a421739eed7c1)! Substantially newer versions might not work.**
-2. Ensure that the packages *numpy*, *matplotlib*, and *imageio* are installed in the python environment used for PhiFlow.
+1. Ensure that the packages *numpy*, *matplotlib*, and *imageio* are installed in the python environment used for PhiFlow.
+2. Download the [PhiFlow source code](https://github.com/tum-pbs/PhiFlow) and follow the [installation instructions](https://tum-pbs.github.io/PhiFlow/Installation_Instructions.html). We use the PyTorch backend, that should work out of the box with a correction installation of PhiFlow. **Our scripts assume the usage of version 2.0.3 at commit [abc82af2](https://github.com/tum-pbs/PhiFlow/tree/abc82af247a4f9de49a0d246277a421739eed7c1)! Substantially newer versions might not work.**
 3. Add our data generation scripts that handle the solver setup and data export to the PhiFlow installation by copying all files from the `data/generation_scripts/PhiFlow` directory to the `demos` directory in your PhiFlow directory.
 4. The copied files contain the PhiFlow scene for the *Inc* training and test data set (.py files), that can be run in the same way as the other example PhiFlow scene files in the `demos` directory. The corresponding batch generation scripts (.sh files) simply run the scene multiple times with different parameters to build the full data set.
 5. Adjust paths and settings in the python generation file if necessary, and run it or alternatively the batch script to generate the data.
 6. Copy or move the generated data set directory to the `data` directory of this source code for training. Make sure to follow the data set structure described below.
 
+Alternatively, it is possible to install PhiFlow and its dependencies in a separate conda environment via *pip* by using the following commands:
+```shell
+conda create -n ACDM_phiflow python=3.8
+conda activate ACDM_phiflow
+
+pip install imageio scipy numpy matplotlib phiflow==2.0.3
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+With this setup, run the data generation script from `data/generation_scripts/PhiFlow` using `python karman2d.py` and adjust arguments as needed. Afterwards, continue with step 5. from the PhiFlow data generation instructions above.
 </details>
 
 
