@@ -198,7 +198,7 @@ Ensure that the data set folder structure resulting from the data generation is 
 -----------------------------------------------------------------------------------------------------
 
 ## Experiments on Extremely Long Rollouts
-On the *Inc* and *Tra* data sets dicussed above, we observed that it is possible to train models that are unconditionally stable and do not diverge, even after `200 000` rollout steps. Key criteria for training models with such stability are outlined [here](long-rollouts.md).
+On the *Inc* and *Tra* data sets dicussed above, we observed that it is possible to train models that are unconditionally stable and do not diverge, even after `200 000` rollout steps. Key criteria for training models with such stability are outlined [here](long-rollouts.md). To sample models for many rollout steps, use the `src/sample_models_*_long.py` scripts. Note that they use a different, GPU-optimized, forward method, that only moves data to the GPU on demand, as storing full trajectories of this length is not feasible on consumer GPUs.
 
 
 

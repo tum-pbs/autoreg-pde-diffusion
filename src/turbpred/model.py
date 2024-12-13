@@ -184,7 +184,7 @@ class PredictionModel(nn.Module):
 
 
 
-    def forward(self, data:torch.Tensor, simParameters:torch.Tensor, useLatent:bool=True) -> torch.Tensor:
+    def forward(self, data:torch.Tensor, simParameters:torch.Tensor, useLatent:bool=True, stepsLong:int=-1) -> torch.Tensor:
         device = "cuda" if self.useGPU else "cpu"
         d = data.to(device)
         simParam = simParameters.to(device) if simParameters is not None else None
@@ -239,11 +239,18 @@ class PredictionModel(nn.Module):
         # DIRECT PREDICTION OF NEXT FRAME WITH DIFFERENT ARCHITECTURES
         else:
             if isinstance(self.modelDecoder, Unet) or isinstance(self.modelDecoder, DilatedResNet) or isinstance(self.modelDecoder, FNO):
-                prediction = self.forwardDirect(d)
+                if stepsLong > 0 and (not self.training):
+                    prediction = self.forwardDirectLongGPUEfficient(d, steps=stepsLong)
+                else:
+                    prediction = self.forwardDirect(d)
                 return prediction, None, (None, None)
 
             else:
-                prediction = self.forwardDiffusionDirect(d, simParam)
+                if stepsLong > 0 and (not self.training):
+                    prediction = self.forwardDiffusionDirectLongGPUEfficient(d, simParam, steps=stepsLong)
+                else:
+                    prediction = self.forwardDiffusionDirect(d, simParam)
+
                 return prediction, None, (None, None)
 
 
@@ -354,6 +361,38 @@ class PredictionModel(nn.Module):
         return prediction
 
 
+    # GPU EFFICIENT VARIANT OF DIRECT PREDICTION FOR EXTREMELY LONG SEQUENCES
+    def forwardDirectLongGPUEfficient(self, d:torch.Tensor, steps:int) -> torch.Tensor:
+        sizeBatch, sizeSeq = d.shape[0], steps
+
+        if "+Prev" in self.p_md.arch or "+2Prev" in self.p_md.arch or "+3Prev" in self.p_md.arch:
+            raise ValueError("GPU efficient variant only supports 1 previous step!")
+
+        prediction = [d[:,0]]
+
+        uIn = prediction[0].to("cuda")
+        self.modelDecoder = self.modelDecoder.to("cuda")
+        for i in range(1, sizeSeq):
+
+            if isinstance(self.modelDecoder, FNO):
+                result = self.modelDecoder(uIn)
+            else:
+                result = self.modelDecoder(uIn, None)
+
+            if self.p_d.simParams:
+                result[:,-len(self.p_d.simParams):] = d[:,0,-len(self.p_d.simParams):].to("cuda") # replace simparam prediction with true values
+
+            uIn = result
+
+            if i % 100 == 0:
+                if i % 10000 == 0:
+                    print("Step %d" % i)
+                result = result.to("cpu")
+                prediction += [result]
+
+        prediction = torch.stack(prediction, dim=1)
+        return prediction
+
 
     # Diffusion model to directly predict next step based on different conditionings
     def forwardDiffusionDirect(self, d:torch.Tensor, simParams:torch.Tensor) -> torch.Tensor:
@@ -449,6 +488,45 @@ class PredictionModel(nn.Module):
 
             return prediction
 
+
+    # GPU EFFICIENT VARIANT FOR DIFFUSION MODELS FOR EXTREMELY LONG SEQUENCES
+    def forwardDiffusionDirectLongGPUEfficient(self, d:torch.Tensor, simParams:torch.Tensor, steps:int) -> torch.Tensor:
+        sizeBatch, sizeSeq = d.shape[0], steps
+
+        # TRAINING
+        if self.training:
+            raise ValueError("Training not supported for GPU efficient variant!")
+
+        # INFERENCE
+        else:
+            if not "+Prev" in self.p_md.arch:
+                raise ValueError("GPU efficient variant only supports 2 previous step!")
+
+            prediction = [d[:,0:1]]
+
+            uInPrev = d[:,0:1].to("cuda")
+            uIn = d[:,1:2].to("cuda")
+            self.modelDecoder = self.modelDecoder.to("cuda")
+
+            for i in range(2, sizeSeq):
+                cond = torch.concat([uInPrev, uIn], dim=2) # combine along channel dimension
+
+                result = self.modelDecoder(conditioning=cond, data=torch.zeros_like(uIn, device="cuda")) # auto-regressive inference
+
+                if self.p_d.simParams:
+                    result[:,:,-len(self.p_d.simParams):] = d[:,0:1,-len(self.p_d.simParams):].to("cuda") # replace simparam prediction with true values
+                
+                uInPrev = uIn
+                uIn = result
+
+                if i % 100 == 0:
+                    if i % 10000 == 0:
+                        print("Step %d" % i)
+                    result = result.to("cpu")
+                    prediction += [result]
+
+            prediction = torch.concat(prediction, dim=1)
+            return prediction
 
 
     # Decoder diffusion model conditioned on latent space

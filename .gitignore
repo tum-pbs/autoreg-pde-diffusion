@@ -169,6 +169,10 @@ runs
 # Model checkpoints
 models
 
+# Sampling files
+results/sampling
+results/sampling_long
+
 # Ignore data set directory apart from generation scripts
 data
 !data/generation_scripts

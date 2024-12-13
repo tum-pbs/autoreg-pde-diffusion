@@ -29,12 +29,12 @@ class Transforms(object):
         # mean and std statistics from whole dataset for normalization
         if self.dim == 2:
             l = self.p_d.normalizeMode.lower()
-            if "inc" in l and "mixed" in l:
+            if ("inc" in l and "mixed" in l) or ("karman" in l and "mixed" in l):
                 # ORDER (fields): velocity (x,y), --, pressure, ORDER (params): rey, --, --
                 self.normMean = np.array([0.444969, 0.000299, 0, 0.000586, 550.000000, 0, 0], dtype=np.float32)
                 self.normStd =  np.array([0.206128, 0.206128, 1, 0.003942, 262.678467, 1, 1], dtype=np.float32)
 
-            if "tra" in l and "mixed" in l:
+            if ("tra" in l and "mixed" in l) or ("mach" in l and "mixed" in l):
                 # ORDER (fields): velocity (x,y), density, pressure, ORDER (params): rey, mach, --
                 self.normMean = np.array([0.560642, -0.000129, 0.903352, 0.637941, 10000.000000, 0.700000, 0], dtype=np.float32)
                 self.normStd =  np.array([0.216987, 0.216987, 0.145391, 0.119944, 1, 0.118322, 1], dtype=np.float32)
